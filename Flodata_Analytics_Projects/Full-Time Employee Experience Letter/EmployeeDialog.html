@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <? if (typeof docUrl !== 'undefined') { ?>
+  <!-- CSS for EmployeeSuccessDialog -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 24px;
+      text-align: center;
+      background-color: #fcfcfd;
+      color: #2d3748;
+    }
+
+    .warning-box {
+      background-color: #fff5f5;
+      border: 1px solid #feb2b2;
+      color: #c53030;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      line-height: 1.5;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .warning-box strong {
+      color: #9b2c2c;
+    }
+
+    .message {
+      font-size: 14px;
+      margin-bottom: 24px;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .btn-open {
+      background-color: #3182ce;
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.15s ease-in-out;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-open:hover {
+      background-color: #2b6cb0;
+    }
+
+    .btn-open:active {
+      background-color: #2c5282;
+    }
+  </style>
+  <? } else { ?>
+  <!-- CSS for EmployeeDialog -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333333;
+      background-color: #fcfcfd;
+      font-size: 14px;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .error-banner {
+      display: none;
+      background-color: #fff5f5;
+      border: 1px solid #feb2b2;
+      color: #c53030;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      line-height: 1.4;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-weight: 500;
+      color: #4a5568;
+      font-size: 13px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #2d3748;
+      background-color: #ffffff;
+      box-sizing: border-box;
+      transition: all 0.2s ease-in-out;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      border: none;
+    }
+
+    .btn-submit {
+      background-color: #3182ce;
+      color: #ffffff;
+    }
+
+    .btn-submit:hover {
+      background-color: #2b6cb0;
+    }
+
+    .btn-submit:active {
+      background-color: #2c5282;
+    }
+
+    .btn-cancel {
+      background-color: #edf2f7;
+      color: #4a5568;
+    }
+
+    .btn-cancel:hover {
+      background-color: #e2e8f0;
+    }
+
+    .btn-cancel:active {
+      background-color: #cbd5e0;
+    }
+  </style>
+  <? } ?>
+</head>
+
+<body>
+  <? if (typeof docUrl !== 'undefined') { ?>
+  <!-- HTML for EmployeeSuccessDialog -->
+  <? if (typeof duplicateExists !== 'undefined' && duplicateExists) { ?>
+  <div class="warning-box">
+    <strong>⚠️ Warning:</strong> A document with the same name already exists in your Google Drive. A new document has
+    still been generated, but you may want to review and clean up old files in your Drive to avoid confusion.
+  </div>
+  <? } ?>
+
+  <div class="message">
+    Completion Letter generated successfully for <br><strong>
+      <?= typeof name !== 'undefined' ? name : '' ?>
+    </strong>.
+  </div>
+
+  <a href="<?= typeof docUrl !== 'undefined' ? docUrl : '' ?>" target="_blank" class="btn-open"
+    onclick="google.script.host.close()">
+    Open Document
+  </a>
+  <? } else { ?>
+  <!-- HTML for EmployeeDialog -->
+  <div class="form-container">
+    <!-- Inline error message banner -->
+    <div id="errorBanner" class="error-banner">
+      Please Fill the Required Details
+    </div>
+
+    <div class="form-group">
+      <label for="employeeId">Employee ID</label>
+      <input type="text" id="employeeId" placeholder="Enter Employee ID (e.g., HRM78)"
+        value="<?= typeof employeeId !== 'undefined' ? employeeId : '' ?>">
+    </div>
+
+    <div class="form-group">
+      <label for="sendingDate">Date of Sending</label>
+      <input type="date" id="sendingDate" value="<?= typeof defaultDate !== 'undefined' ? defaultDate : '' ?>">
+    </div>
+
+    <div class="form-group">
+      <label for="authority">Authorized Name</label>
+      <select id="authority">
+        <option value="" disabled selected>Select Authorized Name</option>
+        <option value="Vaibhav Gupta" <?=(typeof authority !=='undefined' && authority==='Vaibhav Gupta' ) ? 'selected'
+          : '' ?>>Vaibhav Gupta</option>
+        <option value="Ujjwal Gupta" <?=(typeof authority !=='undefined' && authority==='Ujjwal Gupta' ) ? 'selected'
+          : '' ?>>Ujjwal Gupta</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="roles">Roles, Responsibilities & Contributions</label>
+      <input type="text" id="roles" placeholder="Enter roles and responsibilities"
+        value="<?= typeof roles !== 'undefined' ? roles : '' ?>">
+    </div>
+
+    <div class="btn-container">
+      <button class="btn-cancel" onclick="google.script.host.close()">Cancel</button>
+      <button class="btn-submit" onclick="submitForm()">Save Details</button>
+    </div>
+  </div>
+
+  <script>
+    function submitForm() {
+      var errorBanner = document.getElementById('errorBanner');
+      errorBanner.style.display = 'none'; // reset visibility
+
+      var employeeId = document.getElementById('employeeId').value.trim();
+      var sendingDate = document.getElementById('sendingDate').value.trim();
+      var authority = document.getElementById('authority').value;
+      var roles = document.getElementById('roles').value.trim();
+
+      if (!employeeId || !sendingDate || !authority || !roles) {
+        errorBanner.innerText = 'Please Fill the Required Details';
+        errorBanner.style.display = 'block'; // display inline banner
+        return;
+      }
+
+      google.script.run
+        .withSuccessHandler(function () {
+          google.script.host.close();
+        })
+        .withFailureHandler(function (err) {
+          errorBanner.innerText = 'Error saving details: ' + err.message;
+          errorBanner.style.display = 'block';
+        })
+        .saveEmployeeDetails(employeeId, sendingDate, authority, roles);
+    }
+  </script>
+  <? } ?>
+</body>
+
+</html>
